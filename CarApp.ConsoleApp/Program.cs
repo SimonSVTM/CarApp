@@ -16,11 +16,11 @@ namespace CarApp.ConsoleApp
             Console.WriteLine("--- Tilføjer biler (hvis ikke de findes) ---");
             if (repo.GetByLicensePlate("AB12345") == null)
             {
-                repo.Add(new FuelCar("Toyota", "Corolla", 2022, "AB12345", 12000, 45000, 50, 18));
+                repo.Add(new FuelCar("Toyota", "Corolla", 2022, "AB12345", 12000, 50, 18));
             }
             if (repo.GetByLicensePlate("CD67890") == null)
             {
-                repo.Add(new ElectricCar("Tesla", "Model 3", 2023, "CD67890", 8000, 380000, 75, 6.5));
+                repo.Add(new ElectricCar("Tesla", "Model 3", 2023, "CD67890", 8000, 75, 6.5));
             }
 
             Console.WriteLine("\n--- Udskriver alle biler registreret i systemet ---");

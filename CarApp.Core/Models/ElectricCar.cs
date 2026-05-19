@@ -10,8 +10,8 @@ namespace CarApp.Core.Models
         public double BatteryLevel { get; private set; }
         public double KmPerKwh { get; private set; }
 
-        public ElectricCar(string brand, string model, int year, string licensePlate, double odometer, double price, double batteryCapacity, double kmPerKwh)
-            : base(brand, model, year, licensePlate, odometer, price)
+        public ElectricCar(string brand, string model, int year, string licensePlate, double odometer, double batteryCapacity, double kmPerKwh)
+            : base(brand, model, year, licensePlate, odometer)
         {
             BatteryCapacity = batteryCapacity;
             KmPerKwh = kmPerKwh;
@@ -43,9 +43,8 @@ namespace CarApp.Core.Models
                 int.Parse(parts[3]),    // Year
                 parts[4],               // LicensePlate
                 double.Parse(parts[5]), // Odometer
-                double.Parse(parts[6]), // Price
-                double.Parse(parts[7]), // BatteryCapacity
-                double.Parse(parts[9])  // KmPerKwh (parts[8] er BatteryLevel)
+                double.Parse(parts[6]), // BatteryCapacity
+                double.Parse(parts[8])  // KmPerKwh (parts[7] er BatteryLevel)
             );
             car.Charge(double.Parse(parts[8]) - car.BatteryLevel); // Sætter det gemte batteriniveau
             return car;

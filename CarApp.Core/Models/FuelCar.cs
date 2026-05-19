@@ -10,8 +10,8 @@ namespace CarApp.Core.Models
         public double FuelLevel { get; private set; }
         public double KmPerLiter { get; private set; }
 
-        public FuelCar(string brand, string model, int year, string licensePlate, double odometer, double price, double tankCapacity, double kmPerLiter)
-            : base(brand, model, year, licensePlate, odometer, price)
+        public FuelCar(string brand, string model, int year, string licensePlate, double odometer, double tankCapacity, double kmPerLiter)
+            : base(brand, model, year, licensePlate, odometer)
         {
             TankCapacity = tankCapacity;
             KmPerLiter = kmPerLiter;
@@ -43,9 +43,8 @@ namespace CarApp.Core.Models
                 int.Parse(parts[3]),    // Year
                 parts[4],               // LicensePlate
                 double.Parse(parts[5]), // Odometer
-                double.Parse(parts[6]), // Price
-                double.Parse(parts[7]), // TankCapacity
-                double.Parse(parts[9])  // KmPerLiter (parts[8] er FuelLevel, vi genberegner eller overskriver herunder)
+                double.Parse(parts[6]), // TankCapacity
+                double.Parse(parts[8])  // KmPerLiter (parts[7] er FuelLevel, vi genberegner eller overskriver herunder)
             );
             car.Refuel(double.Parse(parts[8]) - car.FuelLevel); // Sætter det gemte brændstofniveau
             return car;

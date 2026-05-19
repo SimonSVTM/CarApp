@@ -114,12 +114,15 @@ namespace CarApp.Wpf.ViewModels
         private bool CanAddCar()
 
         {
-
+            return !(SelectedCar == null 
+                || SelectedCar.LicensePlate.Equals("")
+                || SelectedCar.Brand.Equals("")
+                || SelectedCar.Model.Equals(""));
             // TODO: Returner true hvis SelectedCar ikke er null og 
 
             //       LicensePlate, Brand og Model ikke er tomme 
 
-            return false; // midlertidig 
+            
 
         }
 
@@ -128,7 +131,9 @@ namespace CarApp.Wpf.ViewModels
         private void AddCar()
 
         {
-
+            _repository.Add(SelectedCar);
+            Cars.Add(SelectedCar);
+            SelectedCar = new FuelCar("", "", DateTime.Now.Year, "", 40, 10, 0);
             // TODO: Tilføj SelectedCar til _repository og til Cars-listen 
 
             // TODO: Nulstil SelectedCar til en ny tom FuelCar 
@@ -140,12 +145,20 @@ namespace CarApp.Wpf.ViewModels
         private void FindCar()
 
         {
+            Car foundCar = _repository.GetByLicensePlate(SearchPlate);
+            if (foundCar != null)
+            {
+                SelectedCar = foundCar;
+                SearchPlate = "";
+            }
+            else
+                MessageBox.Show("Bil ikke fundet");
 
             // TODO: Brug _repository.GetByLicensePlate(SearchPlate) 
 
-            // TODO: Hvis fundet: sæt SelectedCar = fundet bil, ryd SearchPlate 
+                // TODO: Hvis fundet: sæt SelectedCar = fundet bil, ryd SearchPlate 
 
-            // TODO: Hvis ikke fundet: vis MessageBox.Show("Bil ikke fundet") 
+                // TODO: Hvis ikke fundet: vis MessageBox.Show("Bil ikke fundet") 
 
         }
 
@@ -154,10 +167,8 @@ namespace CarApp.Wpf.ViewModels
         private bool CanUpdateOrDelete()
 
         {
-
+            return SelectedCar.LicensePlate != "";
             // TODO: Returner true hvis SelectedCar har en ikke-tom LicensePlate 
-
-            return false; // midlertidig 
 
         }
 

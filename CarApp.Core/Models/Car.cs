@@ -18,14 +18,14 @@ namespace CarApp.Core.Models
 
         protected List<Trip> _trips = new List<Trip>();
 
-        protected Car(string brand, string model, int year, string licensePlate, double odometer, double price)
+        protected Car(string brand, string model, int year, string licensePlate, double odometer)
         {
             Brand = brand;
             Model = model;
             Year = year;
             LicensePlate = licensePlate;
             Odometer = odometer;
-            Price = price;
+            Price = 35;
         }
 
         public abstract void UpdateEnergyLevel(double km);
