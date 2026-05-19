@@ -176,9 +176,50 @@ namespace CarApp.Wpf.ViewModels
 
         // ── Disse to metoder får I i Øvelse 6 ────────────── 
 
-        private void UpdateCar() { /* udleveres i Øvelse 6 */ }
 
-        private void DeleteCar() { /* udleveres i Øvelse 6 */ }
+        private void UpdateCar()
+
+        {
+
+            _repository.Update(SelectedCar);
+
+            RefreshCarList();
+
+        }
+
+
+
+        private void DeleteCar()
+
+        {
+
+            var result = MessageBox.Show(
+
+                $"Vil du slette {SelectedCar.Brand} {SelectedCar.Model}?",
+
+                "Bekræft sletning",
+
+                MessageBoxButton.YesNo,
+
+                MessageBoxImage.Warning);
+
+
+
+            if (result == MessageBoxResult.Yes)
+
+            {
+
+                _repository.Delete(SelectedCar.LicensePlate);
+
+                Cars.Remove(SelectedCar);
+
+                SelectedCar = new FuelCar("", "", DateTime.Now.Year, "", 40, 10, 0);
+
+            }
+
+        }
+
+
 
 
 

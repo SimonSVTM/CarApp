@@ -6,11 +6,6 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-	 
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\CarApp.Core\CarApp.Core.csproj" />
-  </ItemGroup>
 
 </Project>

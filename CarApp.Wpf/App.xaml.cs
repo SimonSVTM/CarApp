@@ -17,7 +17,7 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
 
     {
-
+        MessageBox.Show("OnStartup er startet!");
         base.OnStartup(e);
 
         ICarRepository repository = new InMemoryCarRepository();
@@ -27,10 +27,11 @@ public partial class App : Application
         var view = new CarView();
 
         view.DataContext = viewModel;
-
+        MessageBox.Show("OnStartup er her!");
         view.Show();
 
     }
 
 }
 
+    

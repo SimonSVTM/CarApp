@@ -9,14 +9,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CarApp.Wpf
+namespace CarApp.Wpf.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for CarView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class CarView : Window
     {
-        public MainWindow()
+        public CarView()
         {
             InitializeComponent();
         }
