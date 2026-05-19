@@ -1,61 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 
 namespace CarApp.Core.Models
 {
     public class Trip
     {
-        private double distance;
-        private DateTime tripDate, startTime, endTime;
-        private Car car;
+        public double Distance { get; private set; }
+        public DateTime StartTime { get; private set; }
+        public DateTime EndTime { get; private set; }
+        public DateTime TripDate { get; private set; }
+        private Car _car;
+
         public Trip(Car car, double distance, DateTime startTime, DateTime endTime)
         {
-            this.car = car;
-            this.distance = distance;
-            this.tripDate = startTime.Date;
-            this.startTime = startTime;
-            this.endTime = endTime;
+            _car = car;
+            Distance = distance;
+            StartTime = startTime;
+            EndTime = endTime;
+            TripDate = startTime.Date;
         }
 
-        public double getDistance() => distance;
-        public Car getCar() => car;
-        public DateTime getDate() => tripDate;
-        public DateTime getStartTime() => startTime;
-
-        public TimeSpan calculateDuration()
+        public TimeSpan CalculateDuration()
         {
-            return endTime - startTime;
+            return EndTime - StartTime;
         }
 
-        public double calculateFuelUsed()
+        // Tjekker bilens type og beregner det korrekte energiforbrug
+        public double CalculateFuelUsed()
         {
-            if (car is FuelCar fuelCar)
+            if (_car is FuelCar fuelCar)
             {
-                // car er en FuelCar, og vi kan nu bruge variablen 'fuelCar'
-                return distance / fuelCar.KmPerLiter;
+                return Distance / fuelCar.KmPerLiter;
             }
-            else if (car is ElectricCar electricCar)
+            if (_car is ElectricCar electricCar)
             {
-                // car er en ElectricCar, og vi kan nu bruge variablen 'electricCar'
-                return distance / electricCar.KmPerKwh;
+                return Distance / electricCar.KmPerKwh;
             }
-
-            // Hvis der mod forventning kommer en ukendt biltype ind
-            throw new InvalidOperationException("Ukendt biltype. Kan ikke beregne energiforbrug.");
+            throw new InvalidOperationException("Ukendt biltype. Kan ikke beregne forbrug.");
         }
 
-        public double calculateTripPrice(double literPrice)
+        public double CalculateTripPrice(double pricePerUnit)
         {
-            double tripCost = calculateFuelUsed() * literPrice;
-            return double.Round(tripCost, 2);
+            double totalCost = CalculateFuelUsed() * pricePerUnit;
+            return Math.Round(totalCost, 2);
         }
 
         public string GetTripDetails()
         {
-            return $"Trip for {distance} km on {tripDate.ToString()} took {calculateDuration().ToString()}";
+            string unit = _car is ElectricCar ? "kWh" : "liter";
+            return $"Trip for {Distance} km on {TripDate.ToShortDateString()} took {CalculateDuration()}. Consumed: {CalculateFuelUsed():F2} {unit}.";
         }
-
-
     }
 }

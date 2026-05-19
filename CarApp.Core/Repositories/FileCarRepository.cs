@@ -17,10 +17,10 @@ namespace CarApp.Core.Repositories
         public FileCarRepository(string filePath)
         {
             FilePath = filePath;
-            // Sikrer at filen eksisterer, så StreamReader ikke kaster en fejl
+            // Sikrer at filen eksisterer inden læsning/skrivning
             if (!File.Exists(FilePath))
             {
-                File.Create(FilePath).Dispose(); // Create åbner en stream, Dispose lukker den igen med det samme
+                File.Create(FilePath).Dispose();
             }
         }
 
@@ -35,8 +35,7 @@ namespace CarApp.Core.Repositories
                 {
                     if (string.IsNullOrWhiteSpace(line)) continue;
 
-                    string[] parts = line.Split(',');
-                    string type = parts[0]; // Tjekker første felt for at bestemme typen (Tip fra øvelsen)
+                    string type = line.Split(',')[0]; // Tjekker første felt for biltype
 
                     if (type == "FuelCar")
                     {
@@ -48,7 +47,6 @@ namespace CarApp.Core.Repositories
                     }
                 }
             }
-
             return cars;
         }
 
@@ -59,13 +57,9 @@ namespace CarApp.Core.Repositories
 
         public void Add(Car car)
         {
-            // Tjek om bilen allerede findes i filen
             if (GetByLicensePlate(car.LicensePlate) != null)
-            {
-                throw new ArgumentException($"En bil med nummerplade {car.LicensePlate} eksisterer allerede i filen.");
-            }
+                throw new ArgumentException("Bilen findes allerede i filen.");
 
-            // Skriver car.ToString() i bunden af filen (append: true)
             using (StreamWriter writer = new StreamWriter(FilePath, append: true))
             {
                 writer.WriteLine(car.ToString());
@@ -74,17 +68,14 @@ namespace CarApp.Core.Repositories
 
         public void Update(Car car)
         {
-            // Indlæs alle eksisterende biler i hukommelsen
             List<Car> cars = GetAll().ToList();
             Car existing = cars.FirstOrDefault(c => c.LicensePlate.Equals(car.LicensePlate, StringComparison.OrdinalIgnoreCase));
 
             if (existing != null)
             {
                 int index = cars.IndexOf(existing);
-                cars[index] = car; // Erstat med den opdaterede bil
-
-                // Skriv hele listen tilbage til filen (overskriver den gamle fil)
-                WriteAllToFile(cars);
+                cars[index] = car;
+                SaveAll(cars);
             }
         }
 
@@ -95,16 +86,15 @@ namespace CarApp.Core.Repositories
 
             if (carToRemove != null)
             {
+
                 cars.Remove(carToRemove);
-                // Skriv listen tilbage uden den slettede bil
-                WriteAllToFile(cars);
+                SaveAll(cars);
             }
         }
 
-        // Hjælpemetode til at genoverskrive filen ved Update og Delete
-        private void WriteAllToFile(List<Car> cars)
+        private void SaveAll(List<Car> cars)
         {
-            using (StreamWriter writer = new StreamWriter(FilePath, append: false)) // append: false overskriver filen
+            using (StreamWriter writer = new StreamWriter(FilePath, append: false)) // Overskriver hele filen med den nye liste
             {
                 foreach (Car car in cars)
                 {

@@ -6,47 +6,49 @@ namespace CarApp.Core.Models
 {
     public class FuelCar : Car
     {
-        public double TankCapacity { get; set; }
-        public double FuelLevel { get; set; }
-        public double KmPerLiter { get; set; }
-        public double Price { get; set; }
+        public double TankCapacity { get; private set; }
+        public double FuelLevel { get; private set; }
+        public double KmPerLiter { get; private set; }
 
-        public FuelCar(string brand, string model, int year, string licensePlate, double odometer,
-                       double tankCapacity, double fuelLevel, double kmPerLiter, double price)
-            : base(brand, model, year, licensePlate, odometer)
+        public FuelCar(string brand, string model, int year, string licensePlate, double odometer, double price, double tankCapacity, double kmPerLiter)
+            : base(brand, model, year, licensePlate, odometer, price)
         {
             TankCapacity = tankCapacity;
-            FuelLevel = fuelLevel;
             KmPerLiter = kmPerLiter;
-            Price = price;
+            FuelLevel = tankCapacity; // Starter fuldt tanket
         }
 
         public override void UpdateEnergyLevel(double km)
         {
-            double usedFuel = km / KmPerLiter;
-            FuelLevel = Math.Max(0, FuelLevel - usedFuel);
+            FuelLevel -= km / KmPerLiter;
+            if (FuelLevel < 0) FuelLevel = 0;
+        }
+
+        public void Refuel(double liters)
+        {
+            FuelLevel = Math.Min(FuelLevel + liters, TankCapacity);
         }
 
         public override string ToString()
         {
-            return $"FuelCar,{base.ToString()},{TankCapacity},{FuelLevel},{KmPerLiter},{Price}";
+            return $"FuelCar,{base.ToString()},{TankCapacity},{FuelLevel},{KmPerLiter}";
         }
 
         public static FuelCar FromString(string data)
         {
             string[] parts = data.Split(',');
-            // parts[0] er typen "FuelCar"
-            return new FuelCar(
-                parts[1],                  // Brand
-                parts[2],                  // Model
-                int.Parse(parts[3]),       // Year
-                parts[4],                  // LicensePlate
-                double.Parse(parts[5]),    // Odometer
-                double.Parse(parts[6]),    // TankCapacity
-                double.Parse(parts[7]),    // FuelLevel
-                double.Parse(parts[8]),    // KmPerLiter
-                double.Parse(parts[9])     // Price
+            FuelCar car = new FuelCar(
+                parts[1],               // Brand
+                parts[2],               // Model
+                int.Parse(parts[3]),    // Year
+                parts[4],               // LicensePlate
+                double.Parse(parts[5]), // Odometer
+                double.Parse(parts[6]), // Price
+                double.Parse(parts[7]), // TankCapacity
+                double.Parse(parts[9])  // KmPerLiter (parts[8] er FuelLevel, vi genberegner eller overskriver herunder)
             );
+            car.Refuel(double.Parse(parts[8]) - car.FuelLevel); // Sætter det gemte brændstofniveau
+            return car;
         }
     }
 }

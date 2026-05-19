@@ -9,56 +9,40 @@ namespace CarApp.ConsoleApp
     {
         static void Main(string[] args)
         {
-            // =========================================================================
-            // SKIFT REPOSITORY HERVED AT UD-/IND-KOMMENTERE ÉN AF LINJERNE HERUNDER:
-            // =========================================================================
+            // SKIFT REPOSITORY HERVED AT UD-/IND-KOMMENTERE:
             // ICarRepository repo = new InMemoryCarRepository();
             ICarRepository repo = new FileCarRepository("cars.txt");
-            // =========================================================================
 
-            Console.WriteLine("--- Opretter og tilføjer testbiler ---");
-            try
+            Console.WriteLine("--- Tilføjer biler (hvis ikke de findes) ---");
+            if (repo.GetByLicensePlate("AB12345") == null)
             {
-                // Opretter biler (Brug de rigtige parametre til dine constructorer)
-                FuelCar toyota = new FuelCar("Toyota", "Corolla", 2022, "AB12345", 15000, 50, 45, 18, 45000);
-                ElectricCar tesla = new ElectricCar("Tesla", "Model 3", 2023, "CD67890", 8000, 75, 70, 6.5, 380000);
-
-                // Tilføj kun hvis de ikke findes i forvejen (vigtigt hvis FileRepository køres flere gange)
-                if (repo.GetByLicensePlate("AB12345") == null) repo.Add(toyota);
-                if (repo.GetByLicensePlate("CD67890") == null) repo.Add(tesla);
+                repo.Add(new FuelCar("Toyota", "Corolla", 2022, "AB12345", 12000, 45000, 50, 18));
             }
-            catch (Exception ex)
+            if (repo.GetByLicensePlate("CD67890") == null)
             {
-                Console.WriteLine($"Info/Fejl ved tilføjelse: {ex.Message}");
+                repo.Add(new ElectricCar("Tesla", "Model 3", 2023, "CD67890", 8000, 380000, 75, 6.5));
             }
 
-            Console.WriteLine("\n--- Henter alle biler fra repository ---");
+            Console.WriteLine("\n--- Udskriver alle biler registreret i systemet ---");
             foreach (Car car in repo.GetAll())
             {
-                Console.WriteLine($"{car.Brand} {car.Model} — Nummerplade: {car.LicensePlate}");
+                Console.WriteLine($"- {car.Brand} {car.Model} [{car.LicensePlate}] | KM-Tæller: {car.Odometer}");
             }
 
-            Console.WriteLine("\n--- Søger efter specifik bil (AB12345) ---");
-            Car found = repo.GetByLicensePlate("AB12345");
-            if (found != null)
+            Console.WriteLine("\n--- Tester en køretur og opdatering ---");
+            Car myTesla = repo.GetByLicensePlate("CD67890");
+            if (myTesla != null)
             {
-                Console.WriteLine($"Fundet: {found.Brand} {found.Model}");
+                myTesla.TurnOnEngine();
+                Trip commute = new Trip(myTesla, 65, DateTime.Now, DateTime.Now.AddHours(1));
+                myTesla.Drive(commute);
 
-                // Tester en Update (Ændrer kilometertæller)
-                Console.WriteLine("Opdaterer kilometertæller på den fundne bil...");
-                found.Odometer = 20000;
-                repo.Update(found);
-            }
-            else
-            {
-                Console.WriteLine("Bilen blev ikke fundet.");
+                repo.Update(myTesla); // Gemmer den nye kilometerstand
+                Console.WriteLine($"Turen fuldført. Ny kilometerstand: {myTesla.Odometer} km");
+                Console.WriteLine(commute.GetTripDetails());
             }
 
-            Console.WriteLine("\n--- Sletter bil (AB12345) for at teste Delete ---");
-            repo.Delete("AB12345");
-            Console.WriteLine($"Antal biler tilbage i repo: {repo.GetAll().Count()}");
-
-            
+           
         }
     }
 }

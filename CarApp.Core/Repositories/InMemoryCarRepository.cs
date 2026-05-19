@@ -22,9 +22,8 @@ namespace CarApp.Core.Repositories
         public void Add(Car car)
         {
             if (GetByLicensePlate(car.LicensePlate) != null)
-            {
-                throw new ArgumentException($"En bil med nummerplade {car.LicensePlate} eksisterer allerede.");
-            }
+                throw new ArgumentException("En bil med denne nummerplade eksisterer allerede.");
+
             _cars.Add(car);
         }
 
@@ -34,7 +33,7 @@ namespace CarApp.Core.Repositories
             if (existing != null)
             {
                 int index = _cars.IndexOf(existing);
-                _cars[index] = car; // Erstatter den gamle bil med den opdaterede
+                _cars[index] = car;
             }
         }
 

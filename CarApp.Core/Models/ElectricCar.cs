@@ -6,47 +6,49 @@ namespace CarApp.Core.Models
 {
     public class ElectricCar : Car
     {
-        public double BatteryCapacity { get; set; }
-        public double BatteryLevel { get; set; }
-        public double KmPerKwh { get; set; }
-        public double Price { get; set; }
+        public double BatteryCapacity { get; private set; }
+        public double BatteryLevel { get; private set; }
+        public double KmPerKwh { get; private set; }
 
-        public ElectricCar(string brand, string model, int year, string licensePlate, double odometer,
-                           double batteryCapacity, double batteryLevel, double kmPerKwh, double price)
-            : base(brand, model, year, licensePlate, odometer)
+        public ElectricCar(string brand, string model, int year, string licensePlate, double odometer, double price, double batteryCapacity, double kmPerKwh)
+            : base(brand, model, year, licensePlate, odometer, price)
         {
             BatteryCapacity = batteryCapacity;
-            BatteryLevel = batteryLevel;
             KmPerKwh = kmPerKwh;
-            Price = price;
+            BatteryLevel = batteryCapacity; // Starter fuldt opladet
         }
 
         public override void UpdateEnergyLevel(double km)
         {
-            double usedKwh = km / KmPerKwh;
-            BatteryLevel = Math.Max(0, BatteryLevel - usedKwh);
+            BatteryLevel -= km / KmPerKwh;
+            if (BatteryLevel < 0) BatteryLevel = 0;
+        }
+
+        public void Charge(double kwh)
+        {
+            BatteryLevel = Math.Min(BatteryLevel + kwh, BatteryCapacity);
         }
 
         public override string ToString()
         {
-            return $"ElectricCar,{base.ToString()},{BatteryCapacity},{BatteryLevel},{KmPerKwh},{Price}";
+            return $"ElectricCar,{base.ToString()},{BatteryCapacity},{BatteryLevel},{KmPerKwh}";
         }
 
         public static ElectricCar FromString(string data)
         {
             string[] parts = data.Split(',');
-            // parts[0] er typen "ElectricCar"
-            return new ElectricCar(
-                parts[1],                  // Brand
-                parts[2],                  // Model
-                int.Parse(parts[3]),       // Year
-                parts[4],                  // LicensePlate
-                double.Parse(parts[5]),    // Odometer
-                double.Parse(parts[6]),    // BatteryCapacity
-                double.Parse(parts[7]),    // BatteryLevel
-                double.Parse(parts[8]),    // KmPerKwh
-                double.Parse(parts[9])     // Price
+            ElectricCar car = new ElectricCar(
+                parts[1],               // Brand
+                parts[2],               // Model
+                int.Parse(parts[3]),    // Year
+                parts[4],               // LicensePlate
+                double.Parse(parts[5]), // Odometer
+                double.Parse(parts[6]), // Price
+                double.Parse(parts[7]), // BatteryCapacity
+                double.Parse(parts[9])  // KmPerKwh (parts[8] er BatteryLevel)
             );
+            car.Charge(double.Parse(parts[8]) - car.BatteryLevel); // Sætter det gemte batteriniveau
+            return car;
         }
     }
 }
