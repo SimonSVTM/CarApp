@@ -9,29 +9,31 @@ using CarApp.Wpf.Views;
 using System.Windows;
 
 
-
-public partial class App : Application
-
+namespace CarApp.Wpf
 {
 
-    protected override void OnStartup(StartupEventArgs e)
+    public partial class App : Application
 
     {
-        MessageBox.Show("OnStartup er startet!");
-        base.OnStartup(e);
 
-        ICarRepository repository = new InMemoryCarRepository();
+        protected override void OnStartup(StartupEventArgs e)
 
-        var viewModel = new CarViewModel(repository);
+        {
 
-        var view = new CarView();
+            base.OnStartup(e);
+            System.Diagnostics.Debug.WriteLine($"App Starter!");
+            ICarRepository repository = new InMemoryCarRepository();
 
-        view.DataContext = viewModel;
-        MessageBox.Show("OnStartup er her!");
-        view.Show();
+            var viewModel = new CarViewModel(repository);
+
+            var view = new CarView();
+
+            view.DataContext = viewModel;
+
+            view.Show();
+
+        }
 
     }
 
 }
-
-    

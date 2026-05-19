@@ -7,7 +7,7 @@ namespace CarApp.Core.Repositories
 {
     public class InMemoryCarRepository : ICarRepository
     {
-        private readonly List<Car> _cars = new List<Car>();
+        private List<Car> _cars = new List<Car>();
 
         public IEnumerable<Car> GetAll()
         {

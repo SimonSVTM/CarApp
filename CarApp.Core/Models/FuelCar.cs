@@ -6,9 +6,9 @@ namespace CarApp.Core.Models
 {
     public class FuelCar : Car
     {
-        public double TankCapacity { get; private set; }
-        public double FuelLevel { get; private set; }
-        public double KmPerLiter { get; private set; }
+        public double TankCapacity { get;  set; }
+        public double FuelLevel { get;  set; }
+        public double KmPerLiter { get;  set; }
 
         public FuelCar(string brand, string model, int year, string licensePlate, double odometer, double tankCapacity, double kmPerLiter)
             : base(brand, model, year, licensePlate, odometer)

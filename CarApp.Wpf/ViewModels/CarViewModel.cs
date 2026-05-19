@@ -49,6 +49,9 @@ namespace CarApp.Wpf.ViewModels
 
                 OnPropertyChanged(nameof(SelectedCar));
 
+
+                
+
                 (UpdateCarCommand as RelayCommand)?.RaiseCanExecuteChanged();
 
                 (DeleteCarCommand as RelayCommand)?.RaiseCanExecuteChanged();
@@ -91,7 +94,7 @@ namespace CarApp.Wpf.ViewModels
 
             Cars = new ObservableCollection<Car>(_repository.GetAll());
 
-            SelectedCar = new FuelCar("", "", DateTime.Now.Year, "", 40, 10, 0);
+            SelectedCar = new FuelCar("", "", DateTime.Now.Year, "", 40, 10, 20);
 
 
 
@@ -114,7 +117,13 @@ namespace CarApp.Wpf.ViewModels
         private bool CanAddCar()
 
         {
-            return !(SelectedCar == null 
+            return SelectedCar != null
+                && !string.IsNullOrWhiteSpace(SelectedCar.LicensePlate)
+                && !string.IsNullOrWhiteSpace(SelectedCar.Brand)
+                && !string.IsNullOrWhiteSpace(SelectedCar.Model);
+            return true;
+            System.Diagnostics.Debug.WriteLine($"{SelectedCar.LicensePlate.Equals("")}");
+            return !(SelectedCar.Equals(null) 
                 || SelectedCar.LicensePlate.Equals("")
                 || SelectedCar.Brand.Equals("")
                 || SelectedCar.Model.Equals(""));
@@ -133,7 +142,7 @@ namespace CarApp.Wpf.ViewModels
         {
             _repository.Add(SelectedCar);
             Cars.Add(SelectedCar);
-            SelectedCar = new FuelCar("", "", DateTime.Now.Year, "", 40, 10, 0);
+            SelectedCar = new FuelCar("", "", DateTime.Now.Year, "", 40, 10, 20);
             // TODO: Tilføj SelectedCar til _repository og til Cars-listen 
 
             // TODO: Nulstil SelectedCar til en ny tom FuelCar 
@@ -213,7 +222,7 @@ namespace CarApp.Wpf.ViewModels
 
                 Cars.Remove(SelectedCar);
 
-                SelectedCar = new FuelCar("", "", DateTime.Now.Year, "", 40, 10, 0);
+                SelectedCar = new FuelCar("", "", DateTime.Now.Year, "", 40, 10, 20);
 
             }
 

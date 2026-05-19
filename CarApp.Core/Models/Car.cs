@@ -8,12 +8,12 @@ namespace CarApp.Core.Models
 
     public abstract class Car
     {
-        public string Brand { get; private set; }
-        public string Model { get; private set; }
-        public int Year { get; private set; }
-        public string LicensePlate { get; private set; }
-        public double Odometer { get; protected set; }
-        public bool IsEngineOn { get; private set; }
+        public string Brand { get;  set; }
+        public string Model { get;  set; }
+        public int Year { get;  set; }
+        public string LicensePlate { get; set; }
+        public double Odometer { get;  set; }
+        public bool IsEngineOn { get;  set; }
         public double Price { get; set; } // Medtaget fra Opgavesæt 10 DCD
 
         protected List<Trip> _trips = new List<Trip>();

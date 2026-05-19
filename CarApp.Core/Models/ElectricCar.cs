@@ -6,9 +6,9 @@ namespace CarApp.Core.Models
 {
     public class ElectricCar : Car
     {
-        public double BatteryCapacity { get; private set; }
-        public double BatteryLevel { get; private set; }
-        public double KmPerKwh { get; private set; }
+        public double BatteryCapacity { get;  set; }
+        public double BatteryLevel { get;  set; }
+        public double KmPerKwh { get;  set; }
 
         public ElectricCar(string brand, string model, int year, string licensePlate, double odometer, double batteryCapacity, double kmPerKwh)
             : base(brand, model, year, licensePlate, odometer)

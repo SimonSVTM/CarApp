@@ -7,10 +7,10 @@ namespace CarApp.Core.Models
 {
     public class Trip
     {
-        public double Distance { get; private set; }
-        public DateTime StartTime { get; private set; }
-        public DateTime EndTime { get; private set; }
-        public DateTime TripDate { get; private set; }
+        public double Distance { get;  set; }
+        public DateTime StartTime { get;  set; }
+        public DateTime EndTime { get;  set; }
+        public DateTime TripDate { get; set; }
         private Car _car;
 
         public Trip(Car car, double distance, DateTime startTime, DateTime endTime)
