@@ -34,7 +34,7 @@ if (!repo.GetAll().Any())
 
 
 foreach (Car car in repo.GetAll())
-    Console.WriteLine($" {car.Brand} {car.Model} ({car.Year}) —{ car.LicensePlate}");
+    Console.WriteLine($" {car.Brand} {car.Model} ({car.Year}) — {car.LicensePlate}");
 
 
 Console.WriteLine("Program slutter.");

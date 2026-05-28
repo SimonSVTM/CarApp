@@ -8,10 +8,47 @@ namespace CarApp.Core.Models
 
     public abstract class Car
     {
-        public string Brand { get;  set; }
-        public string Model { get;  set; }
-        public int Year { get;  set; }
-        public string LicensePlate { get; set; }
+        private string _brand;
+        public string Brand
+        {
+            get => _brand;
+            set
+            {
+                
+                _brand = value;
+            }
+        }
+
+        private string _model;
+        public string Model
+        {
+            get => _model;
+            set
+            {
+                
+                _model = value;
+            }
+        }
+
+        private int _year;
+        public int Year
+        {
+            get => _year;
+            set
+            {
+                _year = value;
+            }
+        }
+
+        private string _licensePlate;
+        public string LicensePlate
+        {
+            get => _licensePlate;
+            set
+            {
+                _licensePlate = value;
+            }
+        }
         public double Odometer { get;  set; }
         public bool IsEngineOn { get;  set; }
         public double Price { get; set; } // Medtaget fra Opgavesæt 10 DCD

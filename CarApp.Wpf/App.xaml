@@ -1,8 +1,31 @@
 ﻿<Application x:Class="CarApp.Wpf.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:CarApp.Wpf">
+
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
+xmlns:vm="clr-namespace:CarApp.Wpf.ViewModels"
+
+xmlns:v="clr-namespace:CarApp.Wpf.Views"
+
+ShutdownMode="OnMainWindowClose">
+
     <Application.Resources>
 
+        <!-- Kobler ViewModel-typer til View-filer -->
+
+        <DataTemplate DataType="{x:Type vm:CarViewModel}">
+
+            <v:CarView/>
+
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:TripViewModel}">
+
+            <v:TripView/>
+
+        </DataTemplate>
+
     </Application.Resources>
+
 </Application>

@@ -12,11 +12,11 @@ using System.Windows.Shapes;
 namespace CarApp.Wpf.Views
 {
     /// <summary>
-    /// Interaction logic for CarView.xaml
+    /// Interaction logic for TripView.xaml
     /// </summary>
-    public partial class CarView : UserControl
+    public partial class TripView : UserControl
     {
-        public CarView()
+        public TripView()
         {
             InitializeComponent();
         }

@@ -14,9 +14,9 @@ namespace CarApp.Wpf.Views
     /// <summary>
     /// Interaction logic for CarView.xaml
     /// </summary>
-    public partial class CarView : UserControl
+    public partial class MainView : Window
     {
-        public CarView()
+        public MainView()
         {
             InitializeComponent();
         }

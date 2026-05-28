@@ -6,7 +6,7 @@ using System;
 using System.Collections.ObjectModel;
 
 using System.ComponentModel;
-
+using System.Runtime.CompilerServices;
 using System.Windows;
 
 using System.Windows.Input;
@@ -39,22 +39,26 @@ namespace CarApp.Wpf.ViewModels
 
         {
 
-            get => _selectedCar;
+            get {
+                System.Diagnostics.Debug.WriteLine($"SelectedCar null: {_selectedCar == null}");
+                System.Diagnostics.Debug.WriteLine($"LicensePlate: '{_selectedCar?.LicensePlate}'");
+                System.Diagnostics.Debug.WriteLine($"Brand: '{_selectedCar?.Brand}'");
+                System.Diagnostics.Debug.WriteLine($"Model: '{_selectedCar?.Model}'");
+                System.Diagnostics.Debug.WriteLine("Henter");
+
+                return _selectedCar;
+            }
 
             set
 
             {
-
+                System.Diagnostics.Debug.WriteLine("Opdateret");
                 _selectedCar = value;
 
-                OnPropertyChanged(nameof(SelectedCar));
+                OnPropertyChanged();
 
 
-                
-
-                (UpdateCarCommand as RelayCommand)?.RaiseCanExecuteChanged();
-
-                (DeleteCarCommand as RelayCommand)?.RaiseCanExecuteChanged();
+               
 
             }
 
@@ -84,7 +88,7 @@ namespace CarApp.Wpf.ViewModels
 
         public ICommand DeleteCarCommand { get; }
 
-
+        public ICommand RefreshButtonsCommand { get; }
 
         public CarViewModel(ICarRepository repository)
 
@@ -105,9 +109,18 @@ namespace CarApp.Wpf.ViewModels
             UpdateCarCommand = new RelayCommand(_ => UpdateCar(), _ => CanUpdateOrDelete());
 
             DeleteCarCommand = new RelayCommand(_ => DeleteCar(), _ => CanUpdateOrDelete());
+            RefreshButtonsCommand = new RelayCommand(_ => OnTextBoxChanged(), _ => true);
 
         }
 
+
+        private void OnTextBoxChanged()
+        {
+            System.Diagnostics.Debug.WriteLine("TextBox changed! Forcing SelectedCar.set to run...");
+
+            // This explicit assignment forces the C# 'set' block to execute
+            SelectedCar = _selectedCar;
+        }
 
 
         // ── I skal implementere disse fire metoder ──────────── 
@@ -117,16 +130,13 @@ namespace CarApp.Wpf.ViewModels
         private bool CanAddCar()
 
         {
+            System.Diagnostics.Debug.WriteLine("TESTER");
             return SelectedCar != null
                 && !string.IsNullOrWhiteSpace(SelectedCar.LicensePlate)
                 && !string.IsNullOrWhiteSpace(SelectedCar.Brand)
                 && !string.IsNullOrWhiteSpace(SelectedCar.Model);
-            return true;
-            System.Diagnostics.Debug.WriteLine($"{SelectedCar.LicensePlate.Equals("")}");
-            return !(SelectedCar.Equals(null) 
-                || SelectedCar.LicensePlate.Equals("")
-                || SelectedCar.Brand.Equals("")
-                || SelectedCar.Model.Equals(""));
+
+          
             // TODO: Returner true hvis SelectedCar ikke er null og 
 
             //       LicensePlate, Brand og Model ikke er tomme 
@@ -158,7 +168,7 @@ namespace CarApp.Wpf.ViewModels
             if (foundCar != null)
             {
                 SelectedCar = foundCar;
-                SearchPlate = "";
+                SearchPlate = string.Empty;
             }
             else
                 MessageBox.Show("Bil ikke fundet");
@@ -176,7 +186,7 @@ namespace CarApp.Wpf.ViewModels
         private bool CanUpdateOrDelete()
 
         {
-            return SelectedCar.LicensePlate != "";
+            return SelectedCar != null && !string.IsNullOrWhiteSpace(SelectedCar.LicensePlate);
             // TODO: Returner true hvis SelectedCar har en ikke-tom LicensePlate 
 
         }
@@ -248,7 +258,7 @@ namespace CarApp.Wpf.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void OnPropertyChanged(string name) =>
+        protected void OnPropertyChanged([CallerMemberName] string name = null) =>
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
