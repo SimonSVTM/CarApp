@@ -150,9 +150,15 @@ namespace CarApp.Wpf.ViewModels
         private void AddCar()
 
         {
-            _repository.Add(SelectedCar);
-            Cars.Add(SelectedCar);
-            SelectedCar = new FuelCar("", "", DateTime.Now.Year, "", 40, 10, 20);
+            try
+            {
+                _repository.Add(SelectedCar);
+                Cars.Add(SelectedCar);
+                SelectedCar = new FuelCar("", "", DateTime.Now.Year, "", 40, 10, 20);
+            } catch (ArgumentException e)
+            {
+                MessageBox.Show(e.Message);
+            } 
             // TODO: Tilføj SelectedCar til _repository og til Cars-listen 
 
             // TODO: Nulstil SelectedCar til en ny tom FuelCar 
@@ -203,7 +209,7 @@ namespace CarApp.Wpf.ViewModels
             _repository.Update(SelectedCar);
 
             RefreshCarList();
-
+            SelectedCar = new FuelCar("", "", DateTime.Now.Year, "", 40, 10, 20);
         }
 
 
